@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payup - AI-Powered Claims Recovery for Hospitals</title>
+    <meta name="description" content="Recover denied claims. Pay nothing until you do. Payup finds the same denials across hundreds of hospitals and builds cases worth millions. Attorneys recover the money.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            900: '#0f172a',
+                            800: '#1e293b',
+                            700: '#334155',
+                        },
+                        amber: {
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        },
+                        teal: {
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                        },
+                        slate: {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            500: '#64748b',
+                            900: '#0f172a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="font-sans text-slate-900 bg-slate-50">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-navy-900/95 backdrop-blur-sm border-b border-navy-700">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#" class="text-2xl font-bold text-white">Payup</a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#how-it-works" class="text-slate-300 hover:text-white transition">How It Works</a>
+                <a href="#for-attorneys" class="text-slate-300 hover:text-white transition">For Attorneys</a>
+                <a href="#contact" class="bg-amber-500 hover:bg-amber-600 text-navy-900 font-semibold px-5 py-2 rounded-lg transition">Get Started</a>
+            </div>
+            <!-- Mobile menu button -->
+            <button class="md:hidden text-white" id="mobile-menu-btn">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile menu -->
+        <div class="hidden md:hidden bg-navy-800 px-6 py-4" id="mobile-menu">
+            <a href="#how-it-works" class="block py-2 text-slate-300 hover:text-white">How It Works</a>
+            <a href="#for-attorneys" class="block py-2 text-slate-300 hover:text-white">For Attorneys</a>
+            <a href="#contact" class="block mt-4 bg-amber-500 hover:bg-amber-600 text-navy-900 font-semibold px-5 py-2 rounded-lg text-center">Get Started</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-navy-900 pt-32 pb-20 md:pt-40 md:pb-32">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="max-w-3xl">
+                <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight mb-6">
+                    Recover denied claims.<br>
+                    <span class="text-amber-500">Pay nothing until you do.</span>
+                </h1>
+                <p class="text-xl text-slate-300 mb-8 leading-relaxed">
+                    Our AI finds the same denials happening across hundreds of hospitals and builds cases worth millions. Attorneys recover the money.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#contact" class="bg-amber-500 hover:bg-amber-600 text-navy-900 font-semibold px-8 py-4 rounded-lg text-center text-lg transition">
+                        Start Recovering Revenue
+                    </a>
+                    <a href="#how-it-works" class="border border-slate-500 hover:border-white text-white font-semibold px-8 py-4 rounded-lg text-center text-lg transition">
+                        See How It Works
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Stats Section -->
+    <section class="py-16 bg-white border-b border-slate-100">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold text-navy-900 mb-2">$19.7B</div>
+                    <p class="text-slate-500">Spent annually by hospitals fighting denials</p>
+                </div>
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold text-navy-900 mb-2">&lt;1%</div>
+                    <p class="text-slate-500">Of denied claims are ever appealed</p>
+                </div>
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold text-amber-500 mb-2">54-70%</div>
+                    <p class="text-slate-500">Of appeals are successful when pursued</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="py-20 bg-slate-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="max-w-3xl mx-auto text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-navy-900 mb-6">
+                    Why hospitals write off billions in legitimate claims
+                </h2>
+                <p class="text-xl text-slate-500 leading-relaxed">
+                    Denials are up. Margins are down. And fighting back costs more than most claims are worth.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-xl border border-slate-200">
+                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-navy-900 mb-3">Systematic Denials</h3>
+                    <p class="text-slate-500">Payers use algorithms to deny claims that meet coverage rules. 13-18% of Medicare Advantage denials are improper.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl border border-slate-200">
+                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-navy-900 mb-3">Underpayments Ignored</h3>
+                    <p class="text-slate-500">Partial payments fly under the radar. Hospitals lose 1-7% of net revenue to claims paid below contracted rates.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl border border-slate-200">
+                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-navy-900 mb-3">Too Expensive to Fight</h3>
+                    <p class="text-slate-500">Individual claims under $50-100K aren't worth litigating. So you write them off—exactly what payers count on.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="py-20 bg-navy-900" id="how-it-works">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="max-w-3xl mx-auto text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+                    Your $30K denial isn't worth a lawsuit.<br>
+                    <span class="text-amber-500">Until we find 200 hospitals with the same one.</span>
+                </h2>
+                <p class="text-xl text-slate-300 leading-relaxed">
+                    Payup aggregates claims across our network to turn individual write-offs into multi-million dollar cases worth fighting.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="space-y-8">
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center text-navy-900 font-bold">1</div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white mb-2">Connect Your Claims Data</h3>
+                                <p class="text-slate-400">We integrate with your billing system to scan for improper denials and underpayments.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center text-navy-900 font-bold">2</div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white mb-2">AI Detects Patterns</h3>
+                                <p class="text-slate-400">Our AI finds systematic payer behavior—not just in your claims, but across hundreds of hospitals.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center text-navy-900 font-bold">3</div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white mb-2">Cases Get Aggregated</h3>
+                                <p class="text-slate-400">Small claims become big cases. 147 hospitals with the same issue is a $8M lawsuit, not a write-off.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center text-navy-900 font-bold">4</div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white mb-2">Attorneys Take It From Here</h3>
+                                <p class="text-slate-400">We match you with contingency attorneys who specialize in payer litigation. You pay nothing until you recover.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-navy-800 p-8 rounded-xl border border-navy-700">
+                    <div class="text-sm text-teal-500 font-semibold mb-4">AGGREGATED CASE IDENTIFIED</div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Payer</span>
+                            <span class="text-white font-semibold">UnitedHealthcare</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Pattern</span>
+                            <span class="text-white font-semibold">Observation status downgrades</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Hospitals Affected</span>
+                            <span class="text-white font-semibold">147</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Individual Claims</span>
+                            <span class="text-white font-semibold">2,340</span>
+                        </div>
+                        <hr class="border-navy-700">
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Total Case Value</span>
+                            <span class="text-amber-500 font-bold text-2xl">$8.4M</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Case Strength</span>
+                            <span class="text-green-500 font-semibold">78/100</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Agents Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="max-w-3xl mx-auto text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-navy-900 mb-6">
+                    AI that does the work you don't have staff for
+                </h2>
+                <p class="text-xl text-slate-500 leading-relaxed">
+                    No new hires. No consultants. Just software that finds money and builds cases.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-slate-50 p-8 rounded-xl">
+                    <h3 class="text-xl font-bold text-navy-900 mb-6 flex items-center gap-3">
+                        <span class="w-10 h-10 bg-teal-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                            </svg>
+                        </span>
+                        For Hospitals
+                    </h3>
+                    <ul class="space-y-4">
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-teal-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-slate-600"><strong class="text-navy-900">Claims Watchdog</strong> — Scans every remittance, flags denials and underpayments</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-teal-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-slate-600"><strong class="text-navy-900">Pattern Hunter</strong> — Detects systematic payer behavior across the network</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-teal-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-slate-600"><strong class="text-navy-900">Case Scorer</strong> — Predicts recovery probability for every claim</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-teal-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-slate-600"><strong class="text-navy-900">Deadline Tracker</strong> — Never miss a filing window or statute of limitations</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-slate-50 p-8 rounded-xl">
+                    <h3 class="text-xl font-bold text-navy-900 mb-6 flex items-center gap-3">
+                        <span class="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-navy-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path>
+                            </svg>
+                        </span>
+                        For Attorneys
+                    </h3>
+                    <ul class="space-y-4">
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-slate-600"><strong class="text-navy-900">Case Packager</strong> — Claims data, denial evidence, and contracts pre-assembled</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-slate-600"><strong class="text-navy-900">Precedent Finder</strong> — Winning arguments from past cases against the same payer</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-slate-600"><strong class="text-navy-900">Document Drafter</strong> — Demand letters, complaints, motions generated from templates</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-slate-600"><strong class="text-navy-900">Strategy Advisor</strong> — What worked before, and what didn't</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- For Attorneys Section -->
+    <section class="py-20 bg-slate-50" id="for-attorneys">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="text-sm text-amber-600 font-semibold mb-4">FOR ATTORNEYS</div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-navy-900 mb-6">
+                        Stop chasing retainers.<br>
+                        Start winning cases that are already built.
+                    </h2>
+                    <p class="text-xl text-slate-500 mb-8 leading-relaxed">
+                        Payup delivers pre-qualified, high-value cases with the research already done. Bigger cases. Less legwork. Better odds.
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-slate-600">Pre-qualified cases filtered by jurisdiction, payer, and dollar amount</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-slate-600">Aggregated cases worth millions, not individual $30K claims</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-slate-600">Evidence packages and precedent research ready before you accept</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-slate-600">Free to join—take cases on contingency as usual</span>
+                        </li>
+                    </ul>
+                    <a href="#contact" class="inline-block bg-navy-900 hover:bg-navy-800 text-white font-semibold px-8 py-4 rounded-lg transition">
+                        Join the Attorney Network
+                    </a>
+                </div>
+                <div class="bg-white p-8 rounded-xl border border-slate-200">
+                    <div class="text-sm text-slate-500 mb-6">AVAILABLE CASE</div>
+                    <h3 class="text-xl font-bold text-navy-900 mb-4">BCBS Tennessee — CPT 99213 Systematic Denials</h3>
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500">Jurisdiction</span>
+                            <span class="text-navy-900 font-medium">Tennessee (Eastern District)</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500">Hospitals</span>
+                            <span class="text-navy-900 font-medium">34 facilities</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500">Case Value</span>
+                            <span class="text-navy-900 font-medium">$4.2M</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500">Case Strength</span>
+                            <span class="text-green-600 font-medium">82/100</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500">Legal Theory</span>
+                            <span class="text-navy-900 font-medium">Breach of Contract, Bad Faith</span>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <span class="bg-teal-100 text-teal-700 text-xs font-medium px-3 py-1 rounded-full">Precedent Available</span>
+                        <span class="bg-amber-100 text-amber-700 text-xs font-medium px-3 py-1 rounded-full">Evidence Packaged</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="max-w-3xl mx-auto text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-navy-900 mb-6">
+                    When hospitals fight back, they win
+                </h2>
+                <p class="text-xl text-slate-500 leading-relaxed">
+                    Recent verdicts prove payers lose when their practices are exposed in court.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-bold text-amber-500 mb-2">$421M</div>
+                    <p class="text-slate-500">Verdict against BCBS Louisiana for fraud (2024)</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-bold text-amber-500 mb-2">$2.8B</div>
+                    <p class="text-slate-500">BCBS antitrust settlement—largest in healthcare history</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-bold text-amber-500 mb-2">$62.6M</div>
+                    <p class="text-slate-500">Verdict against UnitedHealthcare for underpayments</p>
+                </div>
+            </div>
+            <div class="mt-16 grid md:grid-cols-2 gap-8">
+                <div class="bg-slate-50 p-8 rounded-xl">
+                    <blockquote class="text-lg text-navy-900 italic mb-4 leading-relaxed">
+                        "Rarely, if ever, have I seen the kind of payer behavior that we've seen recently. The behavior overall has been egregious."
+                    </blockquote>
+                    <cite class="text-slate-500 not-italic text-sm">— Dan Morissette, CFO, CommonSpirit Health</cite>
+                </div>
+                <div class="bg-slate-50 p-8 rounded-xl">
+                    <div class="text-4xl font-bold text-red-500 mb-2">50%</div>
+                    <p class="text-navy-900 font-medium mb-2">of rural hospitals now operate in the red</p>
+                    <p class="text-slate-500 text-sm">Small hospitals can't offset payer underpayments—they lose money on commercial and government payers alike.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-navy-900" id="contact">
+        <div class="max-w-3xl mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+                Ready to recover what payers owe you?
+            </h2>
+            <p class="text-xl text-slate-300 mb-8 leading-relaxed">
+                No upfront cost. No added staff. You pay nothing until you win.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                <a href="mailto:hello@payup.com" class="bg-amber-500 hover:bg-amber-600 text-navy-900 font-semibold px-8 py-4 rounded-lg text-lg transition">
+                    I'm a Hospital — Get Started
+                </a>
+                <a href="mailto:attorneys@payup.com" class="border border-slate-500 hover:border-white text-white font-semibold px-8 py-4 rounded-lg text-lg transition">
+                    I'm an Attorney — Join the Network
+                </a>
+            </div>
+                    </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-navy-900 border-t border-navy-700 py-12">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-2xl font-bold text-white">Payup</div>
+                <div class="flex gap-8">
+                    <a href="#how-it-works" class="text-slate-400 hover:text-white transition">How It Works</a>
+                    <a href="#for-attorneys" class="text-slate-400 hover:text-white transition">For Attorneys</a>
+                    <a href="mailto:hello@payup.com" class="text-slate-400 hover:text-white transition">Contact</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-navy-700 text-center text-slate-500 text-sm">
+                &copy; 2025 Payup. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile menu script -->
+    <script>
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close menu when clicking a link
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+    </script>
+
+</body>
+</html>
