@@ -207,16 +207,19 @@
                     <div class="text-3xl font-bold text-teal-500 mb-2">~400-525</div>
                     <div class="font-semibold text-navy-900 mb-2">Addressable Hospitals</div>
                     <p class="text-sm text-slate-500">15-25% of ~2,100 small/rural hospitals can provide files within one week with guided support.</p>
+                    <p class="text-xs text-amber-600 mt-2 font-medium">⚠ Estimate — requires validation</p>
                 </div>
                 <div class="bg-white p-6 rounded-xl border border-slate-200">
                     <div class="text-3xl font-bold text-amber-500 mb-2">2-4 hrs</div>
                     <div class="font-semibold text-navy-900 mb-2">Onboarding Time</div>
                     <p class="text-sm text-slate-500">Per hospital. Customer success walks them through clearinghouse portal, file download, secure upload.</p>
+                    <p class="text-xs text-amber-600 mt-2 font-medium">⚠ Estimate — requires validation</p>
                 </div>
                 <div class="bg-white p-6 rounded-xl border border-slate-200">
                     <div class="text-3xl font-bold text-navy-900 mb-2">30-90 days</div>
                     <div class="font-semibold text-navy-900 mb-2">Initial Data Window</div>
                     <p class="text-sm text-slate-500">Focus on recent data available in active clearinghouse mailboxes. Historical analysis comes later.</p>
+                    <p class="text-xs text-amber-600 mt-2 font-medium">⚠ Needs clearinghouse policy citations</p>
                 </div>
             </div>
 
@@ -757,6 +760,73 @@
                 <p class="text-slate-300 leading-relaxed">
                     File upload works for early adopters but won't scale. The long-term moat is <strong class="text-white">clearinghouse integration</strong>—meeting hospitals where their data already lives. Crawl phase proves the model and builds traction needed for clearinghouse partnership conversations. Each phase unlocks the next.
                 </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Validation Status -->
+    <section class="py-16 bg-amber-50 border-t border-amber-200">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-2xl font-bold text-navy-900 mb-4">Data Validation Status</h2>
+            <p class="text-slate-600 mb-8">This document contains estimates that require validation with third-party research. Claims marked with ⚠ need citations.</p>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm bg-white rounded-xl overflow-hidden">
+                    <thead>
+                        <tr class="bg-slate-100 text-left">
+                            <th class="p-4 font-semibold">Claim</th>
+                            <th class="p-4 font-semibold">Current Status</th>
+                            <th class="p-4 font-semibold">Validation Needed</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-slate-600">
+                        <tr class="border-t border-slate-100">
+                            <td class="p-4">~2,100 small/rural hospitals</td>
+                            <td class="p-4"><span class="text-amber-600 font-medium">Needs citation</span></td>
+                            <td class="p-4">AHA or CMS data on hospital counts by category</td>
+                        </tr>
+                        <tr class="border-t border-slate-100">
+                            <td class="p-4">15-25% can provide files in one week</td>
+                            <td class="p-4"><span class="text-amber-600 font-medium">Estimate (synthesis)</span></td>
+                            <td class="p-4">Data on in-house billing rates, clearinghouse access by segment</td>
+                        </tr>
+                        <tr class="border-t border-slate-100">
+                            <td class="p-4">35% of CAHs outsource billing</td>
+                            <td class="p-4"><span class="text-amber-600 font-medium">Needs citation</span></td>
+                            <td class="p-4">HFMA, MGMA, or industry surveys on RCM outsourcing by hospital size</td>
+                        </tr>
+                        <tr class="border-t border-slate-100">
+                            <td class="p-4">2-4 hours onboarding time</td>
+                            <td class="p-4"><span class="text-amber-600 font-medium">Estimate</span></td>
+                            <td class="p-4">Time studies from similar onboarding, clearinghouse portal training data</td>
+                        </tr>
+                        <tr class="border-t border-slate-100">
+                            <td class="p-4">Clearinghouses retain files 30 days</td>
+                            <td class="p-4"><span class="text-amber-600 font-medium">Needs citation</span></td>
+                            <td class="p-4">Official retention policies from Availity, Change Healthcare, etc.</td>
+                        </tr>
+                        <tr class="border-t border-slate-100">
+                            <td class="p-4">Clearinghouse market share figures</td>
+                            <td class="p-4"><span class="text-amber-600 font-medium">Needs citation</span></td>
+                            <td class="p-4">KLAS, Gartner, or company filings on market share</td>
+                        </tr>
+                        <tr class="border-t border-slate-100">
+                            <td class="p-4">SOC 2 timelines and costs</td>
+                            <td class="p-4"><span class="text-amber-600 font-medium">Needs citation</span></td>
+                            <td class="p-4">Industry surveys on certification timelines and costs</td>
+                        </tr>
+                        <tr class="border-t border-slate-100">
+                            <td class="p-4">CAH approval timeline 2-8 weeks</td>
+                            <td class="p-4"><span class="text-amber-600 font-medium">Estimate</span></td>
+                            <td class="p-4">Research on vendor approval processes by hospital size</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-6 bg-white rounded-xl p-6 border border-amber-200">
+                <h3 class="font-semibold text-navy-900 mb-2">Research Prompts Available</h3>
+                <p class="text-sm text-slate-600">Detailed research prompts for AI agents have been created to validate these claims. See <code class="bg-slate-100 px-2 py-1 rounded">research-prompts.md</code> for the full list of research questions and methodology requirements.</p>
             </div>
         </div>
     </section>
