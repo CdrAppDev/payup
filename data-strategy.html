@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Onboarding Strategy - Payup</title>
+    <meta name="description" content="Payup's crawl, walk, run strategy for hospital 835/837 data onboarding.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            900: '#0f172a',
+                            800: '#1e293b',
+                            700: '#334155',
+                        },
+                        amber: {
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        },
+                        teal: {
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                        },
+                        slate: {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            500: '#64748b',
+                            900: '#0f172a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="font-sans text-slate-900 bg-slate-50">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-navy-900/95 backdrop-blur-sm border-b border-navy-700">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="index.html" class="text-2xl font-bold text-white">Payup</a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="index.html" class="text-slate-300 hover:text-white transition">Home</a>
+                <span class="text-amber-500 font-medium">Data Strategy</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="bg-navy-900 pt-32 pb-16 md:pt-40 md:pb-20">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="max-w-3xl">
+                <p class="text-amber-500 font-semibold mb-4">INTERNAL STRATEGY</p>
+                <h1 class="text-4xl md:text-5xl font-bold text-white leading-tight mb-6">
+                    Data Onboarding:<br>Crawl, Walk, Run
+                </h1>
+                <p class="text-xl text-slate-300 leading-relaxed">
+                    Without 835/837 data, nothing else works. This is our phased roadmap for getting hospital claims data onto the platform—starting today with what's possible, scaling toward full automation.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Challenge -->
+    <section class="py-16 bg-white border-b border-slate-100">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-2xl font-bold text-navy-900 mb-8">The Data Access Challenge</h2>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div>
+                    <h3 class="font-semibold text-navy-900 mb-4">How claims data flows today</h3>
+                    <div class="bg-slate-50 p-6 rounded-xl">
+                        <div class="space-y-4 text-sm">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-navy-900 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
+                                <span>Hospital billing system generates <strong>837 claim file</strong></span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-navy-900 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
+                                <span>837 transmitted to <strong>clearinghouse</strong> (Availity, Change Healthcare, etc.)</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-navy-900 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
+                                <span>Clearinghouse routes claim to <strong>payer</strong></span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-navy-900 text-white rounded-full flex items-center justify-center text-xs font-bold">4</span>
+                                <span>Payer adjudicates and sends <strong>835 remittance</strong> back through clearinghouse</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-navy-900 text-white rounded-full flex items-center justify-center text-xs font-bold">5</span>
+                                <span>Hospital imports 835 into billing system, <strong>discards raw file</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-navy-900 mb-4">Why this is hard</h3>
+                    <ul class="space-y-3">
+                        <li class="flex gap-3">
+                            <span class="text-red-500 font-bold">!</span>
+                            <span><strong>Clearinghouses retain files for only 30 days</strong> in active mailboxes. Archive access (up to 6 months) requires restoration requests.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-red-500 font-bold">!</span>
+                            <span><strong>Most hospitals don't store raw EDI files.</strong> Data lives in billing system databases, not exportable files.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-red-500 font-bold">!</span>
+                            <span><strong>No major billing system offers self-service EDI export.</strong> All require IT involvement or vendor assistance.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-red-500 font-bold">!</span>
+                            <span><strong>35%+ of small hospitals outsource billing.</strong> They may not have direct clearinghouse access at all.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-6">
+                <h3 class="font-semibold text-navy-900 mb-3">The "Can you send me your files today?" test</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="text-left border-b border-amber-200">
+                                <th class="pb-3 font-semibold">Response</th>
+                                <th class="pb-3 font-semibold text-center">Large (500+ beds)</th>
+                                <th class="pb-3 font-semibold text-center">Mid-size (100-500)</th>
+                                <th class="pb-3 font-semibold text-center">Small (&lt;100)</th>
+                                <th class="pb-3 font-semibold text-center">Critical Access</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-slate-600">
+                            <tr class="border-b border-amber-100">
+                                <td class="py-2">"Yes, I can export and email them"</td>
+                                <td class="py-2 text-center">5%</td>
+                                <td class="py-2 text-center">10%</td>
+                                <td class="py-2 text-center">8%</td>
+                                <td class="py-2 text-center text-amber-600 font-semibold">5%</td>
+                            </tr>
+                            <tr class="border-b border-amber-100">
+                                <td class="py-2">"I'd need to ask IT"</td>
+                                <td class="py-2 text-center">15%</td>
+                                <td class="py-2 text-center">25%</td>
+                                <td class="py-2 text-center">20%</td>
+                                <td class="py-2 text-center">13%</td>
+                            </tr>
+                            <tr class="border-b border-amber-100">
+                                <td class="py-2">"I'd need to figure out our clearinghouse"</td>
+                                <td class="py-2 text-center">20%</td>
+                                <td class="py-2 text-center">30%</td>
+                                <td class="py-2 text-center">35%</td>
+                                <td class="py-2 text-center">30%</td>
+                            </tr>
+                            <tr class="border-b border-amber-100">
+                                <td class="py-2">"Our billing company has those"</td>
+                                <td class="py-2 text-center">45%</td>
+                                <td class="py-2 text-center">25%</td>
+                                <td class="py-2 text-center">25%</td>
+                                <td class="py-2 text-center text-red-500 font-semibold">35%</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2">"I don't know what an 835 file is"</td>
+                                <td class="py-2 text-center">15%</td>
+                                <td class="py-2 text-center">10%</td>
+                                <td class="py-2 text-center">12%</td>
+                                <td class="py-2 text-center">17%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-xs text-slate-500 mt-4">Source: Synthesis of outsourcing prevalence, system capabilities, and staffing patterns from market research.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Crawl Phase -->
+    <section class="py-16 bg-slate-50" id="crawl">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="bg-teal-500 text-white text-sm font-bold px-4 py-2 rounded-full">PHASE 1</span>
+                <h2 class="text-3xl font-bold text-navy-900">Crawl: White-Glove Manual Onboarding</h2>
+            </div>
+
+            <p class="text-xl text-slate-500 mb-12 max-w-3xl">
+                Start today with hospitals that have direct clearinghouse access and are motivated to participate. High-touch, low-scale—but proves the model and generates early data.
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="bg-white p-6 rounded-xl border border-slate-200">
+                    <div class="text-3xl font-bold text-teal-500 mb-2">~400-525</div>
+                    <div class="font-semibold text-navy-900 mb-2">Addressable Hospitals</div>
+                    <p class="text-sm text-slate-500">15-25% of ~2,100 small/rural hospitals can provide files within one week with guided support.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-200">
+                    <div class="text-3xl font-bold text-amber-500 mb-2">2-4 hrs</div>
+                    <div class="font-semibold text-navy-900 mb-2">Onboarding Time</div>
+                    <p class="text-sm text-slate-500">Per hospital. Customer success walks them through clearinghouse portal, file download, secure upload.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-200">
+                    <div class="text-3xl font-bold text-navy-900 mb-2">30-90 days</div>
+                    <div class="font-semibold text-navy-900 mb-2">Initial Data Window</div>
+                    <p class="text-sm text-slate-500">Focus on recent data available in active clearinghouse mailboxes. Historical analysis comes later.</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-xl border border-slate-200">
+                    <h3 class="font-bold text-navy-900 mb-4">Target Profile</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span><strong>In-house billing</strong> — Not outsourced to third-party RCM company</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span><strong>Direct clearinghouse access</strong> — Can log into Availity, Change Healthcare, or Office Ally</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span><strong>Motivated business office manager</strong> — Willing to spend 2-4 hours on onboarding</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span><strong>Acute financial pressure</strong> — Operating at loss, high denial rates, motivated to recover revenue</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl border border-slate-200">
+                    <h3 class="font-bold text-navy-900 mb-4">How It Works</h3>
+                    <div class="space-y-4 text-sm">
+                        <div class="flex gap-3">
+                            <span class="w-6 h-6 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">1</span>
+                            <span><strong>Sign BAA</strong> — Required before any data sharing. Payup provides template.</span>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="w-6 h-6 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">2</span>
+                            <span><strong>Guided clearinghouse download</strong> — Payup CS schedules call, screen-shares, walks through portal download of 835 files.</span>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="w-6 h-6 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">3</span>
+                            <span><strong>Secure upload</strong> — Hospital uploads files via Payup secure portal or SFTP.</span>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="w-6 h-6 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">4</span>
+                            <span><strong>Contract rate ingestion</strong> — Hospital provides contracted rate schedules (often spreadsheets) for variance detection.</span>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="w-6 h-6 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">5</span>
+                            <span><strong>Recurring uploads</strong> — Schedule weekly or bi-weekly manual uploads until automation is in place.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-teal-50 border border-teal-200 rounded-xl p-6">
+                <h3 class="font-bold text-navy-900 mb-3">What Payup Needs to Build</h3>
+                <div class="grid md:grid-cols-2 gap-6 text-sm">
+                    <ul class="space-y-2">
+                        <li>• Secure file upload portal (drag-and-drop, SFTP)</li>
+                        <li>• Step-by-step guides for Availity, Change Healthcare, Office Ally, Optum</li>
+                        <li>• Screen recording library for common clearinghouse workflows</li>
+                    </ul>
+                    <ul class="space-y-2">
+                        <li>• 835/837 X12 parser that handles format variations</li>
+                        <li>• Contract rate table ingestion (Excel, CSV)</li>
+                        <li>• BAA template and signing workflow</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Walk Phase -->
+    <section class="py-16 bg-white" id="walk">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="bg-amber-500 text-navy-900 text-sm font-bold px-4 py-2 rounded-full">PHASE 2</span>
+                <h2 class="text-3xl font-bold text-navy-900">Walk: Clearinghouse Authorization</h2>
+            </div>
+
+            <p class="text-xl text-slate-500 mb-12 max-w-3xl">
+                Shift the technical burden from hospital staff to Payup. Hospitals authorize access; Payup pulls files directly from clearinghouse portals or receives automatic delivery.
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                    <div class="text-3xl font-bold text-amber-500 mb-2">~800-1,000</div>
+                    <div class="font-semibold text-navy-900 mb-2">Addressable Hospitals</div>
+                    <p class="text-sm text-slate-500">40-50% of small/rural hospitals can authorize clearinghouse access even if they can't export files themselves.</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                    <div class="text-3xl font-bold text-amber-500 mb-2">1-2 weeks</div>
+                    <div class="font-semibold text-navy-900 mb-2">Setup Time</div>
+                    <p class="text-sm text-slate-500">Hospital signs authorization. Payup configures clearinghouse connection. Automated flow begins.</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                    <div class="text-3xl font-bold text-amber-500 mb-2">Real-time</div>
+                    <div class="font-semibold text-navy-900 mb-2">Data Freshness</div>
+                    <p class="text-sm text-slate-500">Once configured, files flow automatically. No recurring manual work for hospital staff.</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="font-bold text-navy-900 mb-4">Two Authorization Models</h3>
+
+                    <div class="bg-slate-50 p-6 rounded-xl mb-4">
+                        <h4 class="font-semibold text-navy-900 mb-2">Model A: Credential-Based Access</h4>
+                        <p class="text-sm text-slate-500 mb-3">Hospital provides clearinghouse portal credentials. Payup logs in and downloads files on their behalf.</p>
+                        <div class="text-xs space-y-1">
+                            <div class="flex justify-between"><span class="text-slate-500">Security</span><span class="text-amber-600 font-medium">Medium — Shared credentials</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Setup complexity</span><span class="text-green-600 font-medium">Low</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Hospital IT involvement</span><span class="text-green-600 font-medium">None</span></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-6 rounded-xl">
+                        <h4 class="font-semibold text-navy-900 mb-2">Model B: SFTP Delivery Configuration</h4>
+                        <p class="text-sm text-slate-500 mb-3">Hospital (or Payup with authorization) configures clearinghouse to deliver 835 files to Payup's SFTP endpoint.</p>
+                        <div class="text-xs space-y-1">
+                            <div class="flex justify-between"><span class="text-slate-500">Security</span><span class="text-green-600 font-medium">High — No credential sharing</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Setup complexity</span><span class="text-amber-600 font-medium">Medium — Clearinghouse config required</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Hospital IT involvement</span><span class="text-amber-600 font-medium">Sometimes</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-navy-900 mb-4">Clearinghouse Landscape</h3>
+                    <div class="bg-slate-50 p-6 rounded-xl">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="text-left border-b border-slate-200">
+                                    <th class="pb-2 font-semibold">Clearinghouse</th>
+                                    <th class="pb-2 font-semibold">Market Share</th>
+                                    <th class="pb-2 font-semibold">SFTP Delivery</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-slate-600">
+                                <tr class="border-b border-slate-100">
+                                    <td class="py-2">Change Healthcare/Optum</td>
+                                    <td class="py-2">~33%</td>
+                                    <td class="py-2 text-green-600">Yes</td>
+                                </tr>
+                                <tr class="border-b border-slate-100">
+                                    <td class="py-2">Availity</td>
+                                    <td class="py-2">~25%</td>
+                                    <td class="py-2 text-green-600">Yes</td>
+                                </tr>
+                                <tr class="border-b border-slate-100">
+                                    <td class="py-2">Waystar</td>
+                                    <td class="py-2">~15%</td>
+                                    <td class="py-2 text-green-600">Yes</td>
+                                </tr>
+                                <tr class="border-b border-slate-100">
+                                    <td class="py-2">Office Ally</td>
+                                    <td class="py-2">~8%</td>
+                                    <td class="py-2 text-amber-600">Limited</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2">Trizetto</td>
+                                    <td class="py-2">~7%</td>
+                                    <td class="py-2 text-green-600">Yes</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="text-xs text-slate-500 mt-3">~97% of medical claims flow through clearinghouses electronically. Top 5 cover ~88% of market.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-amber-50 border border-amber-200 rounded-xl p-6">
+                <h3 class="font-bold text-navy-900 mb-3">What Payup Needs to Build</h3>
+                <div class="grid md:grid-cols-2 gap-6 text-sm">
+                    <ul class="space-y-2">
+                        <li>• SFTP infrastructure to receive inbound file deliveries</li>
+                        <li>• Secure credential vault (if using Model A)</li>
+                        <li>• Automated file retrieval system for major clearinghouse portals</li>
+                    </ul>
+                    <ul class="space-y-2">
+                        <li>• Authorization forms and data sharing agreements</li>
+                        <li>• File monitoring and alerting (missing files, format errors)</li>
+                        <li>• SOC 2 Type I certification (table stakes for authorization)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Run Phase -->
+    <section class="py-16 bg-navy-900" id="run">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="bg-white text-navy-900 text-sm font-bold px-4 py-2 rounded-full">PHASE 3</span>
+                <h2 class="text-3xl font-bold text-white">Run: Direct Clearinghouse Partnerships</h2>
+            </div>
+
+            <p class="text-xl text-slate-300 mb-12 max-w-3xl">
+                The endgame. Payup becomes an authorized data recipient within clearinghouse networks. Hospital authorization is a checkbox, not a configuration project.
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="bg-navy-800 p-6 rounded-xl border border-navy-700">
+                    <div class="text-3xl font-bold text-white mb-2">2,100+</div>
+                    <div class="font-semibold text-white mb-2">Full TAM Accessible</div>
+                    <p class="text-sm text-slate-400">All small/rural hospitals using partner clearinghouses. Outsourced billing is no longer a barrier.</p>
+                </div>
+                <div class="bg-navy-800 p-6 rounded-xl border border-navy-700">
+                    <div class="text-3xl font-bold text-white mb-2">Minutes</div>
+                    <div class="font-semibold text-white mb-2">Activation Time</div>
+                    <p class="text-sm text-slate-400">Hospital checks a box in their clearinghouse portal. Data flows immediately.</p>
+                </div>
+                <div class="bg-navy-800 p-6 rounded-xl border border-navy-700">
+                    <div class="text-3xl font-bold text-white mb-2">Zero</div>
+                    <div class="font-semibold text-white mb-2">Hospital Technical Effort</div>
+                    <p class="text-sm text-slate-400">No file downloads, no SFTP configuration, no IT involvement.</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-navy-800 p-8 rounded-xl border border-navy-700">
+                    <h3 class="font-bold text-white mb-4">How It Works</h3>
+                    <div class="space-y-4 text-sm">
+                        <div class="flex gap-3">
+                            <span class="w-6 h-6 bg-amber-500 text-navy-900 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">1</span>
+                            <span class="text-slate-300"><strong class="text-white">Payup establishes partnership</strong> with clearinghouse (Availity, Change Healthcare, etc.)</span>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="w-6 h-6 bg-amber-500 text-navy-900 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">2</span>
+                            <span class="text-slate-300"><strong class="text-white">Payup appears as authorized app</strong> in clearinghouse marketplace/settings</span>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="w-6 h-6 bg-amber-500 text-navy-900 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">3</span>
+                            <span class="text-slate-300"><strong class="text-white">Hospital grants authorization</strong> via single click in clearinghouse portal</span>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="w-6 h-6 bg-amber-500 text-navy-900 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">4</span>
+                            <span class="text-slate-300"><strong class="text-white">Data flows via API</strong> — real-time or batch, depending on clearinghouse capabilities</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-navy-800 p-8 rounded-xl border border-navy-700">
+                    <h3 class="font-bold text-white mb-4">Partnership Requirements</h3>
+                    <ul class="space-y-3 text-sm text-slate-300">
+                        <li class="flex gap-3">
+                            <span class="text-amber-500">•</span>
+                            <span><strong class="text-white">SOC 2 Type II certification</strong> — Required by all major clearinghouses</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-amber-500">•</span>
+                            <span><strong class="text-white">HITRUST certification</strong> — Increasingly required, especially by Change Healthcare</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-amber-500">•</span>
+                            <span><strong class="text-white">Demonstrated market traction</strong> — Clearinghouses want partners with existing customer base</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-amber-500">•</span>
+                            <span><strong class="text-white">Technical integration</strong> — Build to clearinghouse API specs, pass certification</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-amber-500">•</span>
+                            <span><strong class="text-white">Revenue share or fees</strong> — Clearinghouses may charge per-transaction or annual fees</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-navy-800 border border-navy-700 rounded-xl p-6">
+                <h3 class="font-bold text-white mb-4">Timeline to Clearinghouse Partnership</h3>
+                <div class="grid md:grid-cols-4 gap-4 text-sm">
+                    <div class="text-center">
+                        <div class="text-amber-500 font-bold mb-1">Months 1-6</div>
+                        <div class="text-slate-400">Build traction with Crawl/Walk phases. Get SOC 2 Type I.</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-amber-500 font-bold mb-1">Months 6-12</div>
+                        <div class="text-slate-400">Pursue SOC 2 Type II. Begin clearinghouse partnership discussions.</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-amber-500 font-bold mb-1">Months 12-18</div>
+                        <div class="text-slate-400">Complete HITRUST if required. Technical integration with first clearinghouse.</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-amber-500 font-bold mb-1">Months 18-24</div>
+                        <div class="text-slate-400">Launch partnership. Expand to additional clearinghouses.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Outsourced Billing Problem -->
+    <section class="py-16 bg-slate-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-2xl font-bold text-navy-900 mb-8">The Outsourced Billing Segment (~35% of CAHs)</h2>
+
+            <p class="text-lg text-slate-500 mb-8 max-w-3xl">
+                For hospitals that outsource billing to companies like TruBridge, R1 RCM, or regional billing services, the hospital may not have direct clearinghouse access. This requires a different approach.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-xl border border-slate-200">
+                    <h3 class="font-bold text-navy-900 mb-4">Option A: Hospital Requests Data from Billing Company</h3>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex gap-3">
+                            <span class="text-slate-400">1.</span>
+                            <span>Hospital instructs billing company to share 835/837 data with Payup</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-slate-400">2.</span>
+                            <span>Requires amendment to existing contract or data sharing addendum</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-slate-400">3.</span>
+                            <span>Billing company may charge fees for custom data exports</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-slate-400">4.</span>
+                            <span>Timeline: 2-6 weeks depending on billing company responsiveness</span>
+                        </li>
+                    </ul>
+                    <div class="mt-4 pt-4 border-t border-slate-100">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500">Friction level:</span>
+                            <span class="text-amber-600 font-semibold">High</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl border border-slate-200">
+                    <h3 class="font-bold text-navy-900 mb-4">Option B: Payup Partners with Billing Companies</h3>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex gap-3">
+                            <span class="text-slate-400">1.</span>
+                            <span>Payup establishes relationship with TruBridge, regional billing services</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-slate-400">2.</span>
+                            <span>Billing company offers Payup as value-add service to their clients</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-slate-400">3.</span>
+                            <span>Data flows through established billing company infrastructure</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-slate-400">4.</span>
+                            <span>Revenue share model with billing company</span>
+                        </li>
+                    </ul>
+                    <div class="mt-4 pt-4 border-t border-slate-100">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500">Friction level:</span>
+                            <span class="text-green-600 font-semibold">Low (once partnership exists)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-red-50 border border-red-200 rounded-xl p-6">
+                <h3 class="font-bold text-navy-900 mb-3">Risk: Billing Companies as Competitors</h3>
+                <p class="text-sm text-slate-600">
+                    Some billing companies may view Payup as a competitive threat—especially if they offer (or plan to offer) similar underpayment recovery services. TruBridge, for example, has its own analytics and denial management offerings. Partnership discussions should probe for competitive concerns early.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Requirements -->
+    <section class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-2xl font-bold text-navy-900 mb-8">Security & Compliance Requirements</h2>
+
+            <p class="text-lg text-slate-500 mb-8 max-w-3xl">
+                835/837 files contain PHI. There are no shortcuts here—these requirements create a 3-4 month minimum runway before receiving hospital data.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                <div class="bg-slate-50 p-6 rounded-xl">
+                    <h3 class="font-bold text-navy-900 mb-4">Minimum Requirements (Day 1)</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex gap-2">
+                            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>HIPAA policies documented</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>Risk assessment completed</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>Encryption (AES-256 at rest, TLS 1.2+ in transit)</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>Audit logging in place</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>Incident response plan</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>BAA template ready</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-xl">
+                    <h3 class="font-bold text-navy-900 mb-4">Certifications by Phase</h3>
+                    <div class="space-y-4 text-sm">
+                        <div class="flex justify-between items-center pb-2 border-b border-slate-200">
+                            <div>
+                                <div class="font-semibold">SOC 2 Type I</div>
+                                <div class="text-slate-500">Table stakes for most hospitals</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-amber-600 font-semibold">3-4 months</div>
+                                <div class="text-slate-500">$20-50K</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center pb-2 border-b border-slate-200">
+                            <div>
+                                <div class="font-semibold">SOC 2 Type II</div>
+                                <div class="text-slate-500">Required for mid-size+ hospitals</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-amber-600 font-semibold">6-12 months</div>
+                                <div class="text-slate-500">$30-100K</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <div class="font-semibold">HITRUST</div>
+                                <div class="text-slate-500">Required for clearinghouse partnerships</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-amber-600 font-semibold">8-18 months</div>
+                                <div class="text-slate-500">$80-200K+</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 p-6 rounded-xl">
+                <h3 class="font-bold text-navy-900 mb-4">Hospital Approval Timelines</h3>
+                <div class="grid md:grid-cols-4 gap-4 text-sm text-center">
+                    <div>
+                        <div class="text-2xl font-bold text-navy-900 mb-1">6-12 mo</div>
+                        <div class="text-slate-500">Large health systems</div>
+                        <div class="text-xs text-slate-400">Multiple committees</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-navy-900 mb-1">3-6 mo</div>
+                        <div class="text-slate-500">Mid-size hospitals</div>
+                        <div class="text-xs text-slate-400">Standard process</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-navy-900 mb-1">1-3 mo</div>
+                        <div class="text-slate-500">Small hospitals</div>
+                        <div class="text-xs text-slate-400">Simpler governance</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-teal-500 mb-1">2-8 wks</div>
+                        <div class="text-slate-500">Critical Access</div>
+                        <div class="text-xs text-slate-400">Less formal process</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Summary -->
+    <section class="py-16 bg-navy-900">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-2xl font-bold text-white mb-8">Summary: The Path to Scale</h2>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="text-left border-b border-navy-700">
+                            <th class="pb-4 text-slate-400 font-semibold"></th>
+                            <th class="pb-4 text-teal-500 font-semibold">Crawl</th>
+                            <th class="pb-4 text-amber-500 font-semibold">Walk</th>
+                            <th class="pb-4 text-white font-semibold">Run</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-slate-300">
+                        <tr class="border-b border-navy-800">
+                            <td class="py-3 text-slate-400">Approach</td>
+                            <td class="py-3">White-glove manual upload</td>
+                            <td class="py-3">Clearinghouse authorization</td>
+                            <td class="py-3">Direct clearinghouse partnership</td>
+                        </tr>
+                        <tr class="border-b border-navy-800">
+                            <td class="py-3 text-slate-400">Market size</td>
+                            <td class="py-3">~400-525 hospitals</td>
+                            <td class="py-3">~800-1,000 hospitals</td>
+                            <td class="py-3">2,100+ hospitals</td>
+                        </tr>
+                        <tr class="border-b border-navy-800">
+                            <td class="py-3 text-slate-400">Hospital effort</td>
+                            <td class="py-3">2-4 hours guided</td>
+                            <td class="py-3">Sign authorization</td>
+                            <td class="py-3">Check a box</td>
+                        </tr>
+                        <tr class="border-b border-navy-800">
+                            <td class="py-3 text-slate-400">Payup effort per hospital</td>
+                            <td class="py-3">High (manual support)</td>
+                            <td class="py-3">Medium (config)</td>
+                            <td class="py-3">Low (automated)</td>
+                        </tr>
+                        <tr class="border-b border-navy-800">
+                            <td class="py-3 text-slate-400">Data freshness</td>
+                            <td class="py-3">Weekly/bi-weekly batches</td>
+                            <td class="py-3">Daily/real-time</td>
+                            <td class="py-3">Real-time</td>
+                        </tr>
+                        <tr class="border-b border-navy-800">
+                            <td class="py-3 text-slate-400">Security required</td>
+                            <td class="py-3">BAA + basic HIPAA</td>
+                            <td class="py-3">SOC 2 Type I</td>
+                            <td class="py-3">SOC 2 Type II + HITRUST</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 text-slate-400">Timeline</td>
+                            <td class="py-3">Start today</td>
+                            <td class="py-3">Months 3-6</td>
+                            <td class="py-3">Months 12-24</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-12 bg-navy-800 border border-navy-700 rounded-xl p-8">
+                <h3 class="font-bold text-white mb-4">The Bottom Line</h3>
+                <p class="text-slate-300 leading-relaxed">
+                    File upload works for early adopters but won't scale. The long-term moat is <strong class="text-white">clearinghouse integration</strong>—meeting hospitals where their data already lives. Crawl phase proves the model and builds traction needed for clearinghouse partnership conversations. Each phase unlocks the next.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-navy-900 border-t border-navy-700 py-12">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-2xl font-bold text-white">Payup</div>
+                <div class="flex gap-8">
+                    <a href="index.html" class="text-slate-400 hover:text-white transition">Home</a>
+                    <a href="data-strategy.html" class="text-slate-400 hover:text-white transition">Data Strategy</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-navy-700 text-center text-slate-500 text-sm">
+                &copy; 2025 Payup. Internal Strategy Document.
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
